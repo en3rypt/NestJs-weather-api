@@ -4,14 +4,18 @@ import { AxiosResponse } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import  {PrismaService} from '../prisma/prisma.service';
 import {History, Prisma} from '@prisma/client';
+import { env } from 'process';
+import { ConfigService } from '@nestjs/config/dist';
 
 @Injectable()
 export class WeatherService {
-    constructor(private readonly httpService: HttpService,private prisma: PrismaService){}
+    constructor(
+        private readonly httpService: HttpService,
+        private prisma: PrismaService,
+        private config: ConfigService){}
 
     async getWeatherByCity(city: string): Promise<any> {
-        const s = 'https://api.openweathermap.org/data/2.5/weather?q='+city+'&appid='+process.env.API_KEY;
-        const {data}:any = await firstValueFrom(this.httpService.get('https://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=be5d8aecaf85cbaf6a0609ce7af95247').pipe(catchError(e => {
+        const {data}:any = await firstValueFrom(this.httpService.get('https://api.openweathermap.org/data/2.5/weather?q='+city+'&appid='+this.config.get<string>('WEATHER_API_KEY')).pipe(catchError(e => {
             throw new HttpException(e.response.data, e.response.status);
             })))
         const response = {
