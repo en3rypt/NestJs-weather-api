@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios/dist';
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import  {PrismaService} from '../prisma/prisma.service';
@@ -54,9 +54,17 @@ export class WeatherService {
     }
 
     async deleteHistory(where: Prisma.HistoryWhereUniqueInput): Promise<History> {
-        return this.prisma.history.delete({
-            where,
-        });
+        
+
+            const response = this.prisma.history.delete({
+                where,
+            }).catch(e => {
+                throw new HttpException("Record Not Found", HttpStatus.NOT_FOUND);
+            });
+            return response;
+        
+        
+
     }
     
 
