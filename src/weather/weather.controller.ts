@@ -33,16 +33,16 @@ export class WeatherController {
     async getWeather(@Param('city') city:string): Promise<any> {
         const response = await this.weatherService.getWeatherByCity(city);
         // if(data.code )
-        if (response.cod == 200) {
 
+        const date = new Date();
+        var ISToffSet = 330; //IST is 5:30; i.e. 60*5+30 = 330 in minutes 
+        var offset= ISToffSet*60*1000;
+        var ISTTime = new Date(date.getTime()+offset);
         this.weatherService.createHistory({
             city,
             temperature:100,
-            date:new Date()
+            date:ISTTime
         });
-        }
-
-
         return response;
     }
 
