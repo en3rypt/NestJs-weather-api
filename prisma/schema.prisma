@@ -1,0 +1,18 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// env("DATABASE_URL")
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://admin:admin@localhost:3306/weatherDB"
+}
+
+model History {
+  id          Int      @id @default(autoincrement())
+  city        String
+  temperature Float
+  date        DateTime
+}
