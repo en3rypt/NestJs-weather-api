@@ -40,7 +40,7 @@ export class WeatherController {
         var ISTTime = new Date(date.getTime()+offset);
         this.weatherService.createHistory({
             city,
-            temperature:100,
+            temperature:response.temperature,
             date:ISTTime
         });
         return response;
